@@ -1,6 +1,14 @@
+:root {
+  --bg: #111;
+  --fg: #eee;
+  --panel: #222;
+  --button-bg: #333;
+  --button-hover: #555;
+}
+
 body {
-  background-color: #111;
-  color: #eee;
+  background-color: var(--bg);
+  color: var(--fg);
   font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
@@ -11,7 +19,7 @@ body {
 }
 
 #game-container {
-  background: #222;
+  background: var(--panel);
   padding: 20px 30px;
   border-radius: 12px;
   width: 360px;
@@ -24,7 +32,7 @@ h1 {
 }
 
 button {
-  background: #333;
+  background: var(--button-bg);
   color: white;
   border: none;
   padding: 8px 12px;
@@ -35,7 +43,7 @@ button {
 }
 
 button:hover {
-  background: #555;
+  background: var(--button-hover);
 }
 
 #content {
@@ -64,3 +72,13 @@ input {
   margin-left: 4px;
   padding: 5px 8px;
   font-size: 12px;
+}
+
+/* Light mode override */
+.light-mode {
+  --bg: #f0f0f0;
+  --fg: #111;
+  --panel: #fff;
+  --button-bg: #ddd;
+  --button-hover: #ccc;
+}
