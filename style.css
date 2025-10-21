@@ -1,0 +1,66 @@
+body {
+  background-color: #111;
+  color: #eee;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  margin: 0;
+  padding-top: 40px;
+}
+
+#game-container {
+  background: #222;
+  padding: 20px 30px;
+  border-radius: 12px;
+  width: 360px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0,0,0,0.6);
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+button {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #555;
+}
+
+#content {
+  background: #181818;
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 8px;
+  min-height: 150px;
+}
+
+input {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  margin-right: 5px;
+}
+
+.save-slot {
+  background: #292929;
+  padding: 10px;
+  margin: 6px 0;
+  border-radius: 8px;
+}
+
+.save-slot button {
+  margin-left: 4px;
+  padding: 5px 8px;
+  font-size: 12px;
