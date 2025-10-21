@@ -3,6 +3,7 @@ let game = {
   money: 0,
   parts: [],
   builtPCs: [],
+  darkMode: true,
   cryptos: {
     bitcoin: { amount: 0, price: 50000 },
     rufuscoin: { amount: 0, price: 200 }
@@ -17,22 +18,29 @@ function openScreen(screen) {
   currentScreen = screen;
   const content = document.getElementById("content");
   switch (screen) {
+    case "mainmenu":
+      renderMainMenu();
+      break;
     case "shop":
       content.innerHTML = `
         <h2>🛒 Shop</h2>
         <p>Buy parts here. (Coming soon)</p>
+        <button onclick="openScreen('menu')">🏠 Main Menu</button>
       `;
       break;
     case "inventory":
       content.innerHTML = `
         <h2>📦 Inventory</h2>
         <p>View your parts. (Coming soon)</p>
+        <button onclick="openScreen('menu')">🏠 Main Menu</button>
       `;
       break;
     case "build":
       content.innerHTML = `
         <h2>🧰 Build PC</h2>
         <p>Assemble compatible parts. (Coming soon)</p>
+        <button onclick="simulateSell()">💵 Simulate Sell</button><br>
+        <button onclick="openScreen('menu')">🏠 Main Menu</button>
       `;
       break;
     case "crypto":
@@ -41,9 +49,34 @@ function openScreen(screen) {
     case "saves":
       renderSaveScreen();
       break;
+    case "settings":
+      renderSettings();
+      break;
     default:
-      content.innerHTML = `<p>Welcome back to <b>Build & Mine</b>!</p>`;
+      renderMainMenu();
   }
+}
+
+// === MAIN MENU ===
+function renderMainMenu() {
+  document.getElementById("content").innerHTML = `
+    <h2>🏠 Main Menu</h2>
+    <button onclick="openScreen('saves')">▶️ Play</button>
+    <button onclick="openScreen('settings')">⚙️ Settings</button>
+  `;
+}
+
+// === IN-GAME MENU ===
+function openGameMenu() {
+  const content = document.getElementById("content");
+  content.innerHTML = `
+    <h2>💻 PC Miner Tycoon</h2>
+    <button onclick="openScreen('shop')">Shop</button>
+    <button onclick="openScreen('inventory')">Inventory</button>
+    <button onclick="openScreen('build')">Build</button>
+    <button onclick="openScreen('crypto')">Crypto</button>
+    <button onclick="openScreen('mainmenu')">🏠 Main Menu</button>
+  `;
 }
 
 // === CRYPTO SCREEN ===
@@ -60,8 +93,9 @@ function renderCryptoScreen() {
       </div>
     `;
   }
-  html += `<p style="margin-top:10px;">Prices change every few seconds...</p>`;
-  document.getElementById("content").innerHTML = html;
+  html += `<p style="margin-top:10px;">Prices change every few seconds...</p>
+  <button onclick="openScreen('menu')">🏠 Main Menu</button>`;
+  content.innerHTML = html;
 }
 
 function mineCrypto(coin) {
@@ -84,6 +118,15 @@ setInterval(() => {
   if (currentScreen === "crypto") renderCryptoScreen();
 }, 5000);
 
+// === SELL PRICE SIMULATION (TEMP) ===
+function simulateSell() {
+  // example part prices (replace with actual inventory later)
+  let parts = [100, 50, 0];
+  let sum = parts.reduce((a, b) => a + b, 0);
+  let total = (sum + 100) * (0.9 + Math.random() * 0.3);
+  alert(`This PC sells for $${total.toFixed(2)}.`);
+}
+
 // === SAVE SYSTEM ===
 function renderSaveScreen() {
   const content = document.getElementById("content");
@@ -103,6 +146,7 @@ function renderSaveScreen() {
       </div>
     `;
   }
+  html += `<button onclick="openScreen('mainmenu')">🏠 Main Menu</button>`;
   content.innerHTML = html;
 }
 
@@ -118,6 +162,7 @@ function loadGame(slot) {
   game = JSON.parse(data);
   alert(`Loaded slot ${slot}`);
   openScreen("menu");
+  openGameMenu();
 }
 
 function renameSave(slot) {
@@ -136,6 +181,24 @@ function deleteSave(slot) {
   }
 }
 
+// === SETTINGS ===
+function renderSettings() {
+  const content = document.getElementById("content");
+  const mode = game.darkMode ? "Dark" : "Light";
+  content.innerHTML = `
+    <h2>⚙️ Settings</h2>
+    <p>Current Theme: <b>${mode}</b></p>
+    <button onclick="toggleDarkMode()">Toggle Dark Mode</button><br><br>
+    <button onclick="openScreen('mainmenu')">🏠 Main Menu</button>
+  `;
+}
+
+function toggleDarkMode() {
+  game.darkMode = !game.darkMode;
+  document.body.classList.toggle("light-mode", !game.darkMode);
+  renderSettings();
+}
+
 // === AUTOSAVE ===
 function autoSave() {
   localStorage.setItem("autosave", JSON.stringify(game));
@@ -146,7 +209,9 @@ window.onload = () => {
   const data = localStorage.getItem("autosave");
   if (data) {
     game = JSON.parse(data);
+    if (!game.hasOwnProperty("darkMode")) game.darkMode = true;
+    document.body.classList.toggle("light-mode", !game.darkMode);
     console.log("Autosave loaded.");
   }
-  openScreen("menu");
+  openScreen("mainmenu");
 };
